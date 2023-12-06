@@ -19,10 +19,10 @@ def get_repo_metrics(repo_owner, repo_name,database_service_url):
     issues_info = parse_issue_data(issues_response.json(), repo_owner, repo_name)
 
     # Send data to Database Service
-    database_response = requests.post(database_service_url, json={"commits": commits_info, "issues": issues_info})
+    #database_response = requests.post(database_service_url, json={"commits": commits_info, "issues": issues_info})
 
     # Return the metrics
-    return database_response.json()
+    #return database_response.json()
 
 def parse_commit_data(commits_data, repo_owner, repo_name):
     commits_info = []

@@ -29,6 +29,7 @@ az acr login -n iitcloud
 docker push iitcloud.azurecr.io/database-app:latest
 docker push iitcloud.azurecr.io/gui-app:latest
 docker push iitcloud.azurecr.io/metrics-app:latest
+az aks browse --resource-group DW_CW --name iit-cloud
 
 
 docker tag sum-service:latest chanakaj/sum-service:latest
