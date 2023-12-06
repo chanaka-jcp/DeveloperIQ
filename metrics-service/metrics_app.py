@@ -5,7 +5,7 @@ database_service_name = "database-service"
 database_service_port = 8001  # Port at which result-service is exposed
 
 # Construct the URL using the service name and port
-database_service_url = f"http://{database_service_name}:{database_service_port}/insert_metrics"
+database_service_url = f"http://{database_service_name}.default.svc.cluster.local:{database_service_port}/insert_metrics"
 #database_service_url = "http://localhost:8001/insert_metrics"
 
 def get_repo_metrics(repo_owner, repo_name,database_service_url):

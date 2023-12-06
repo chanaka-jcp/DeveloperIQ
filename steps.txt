@@ -22,7 +22,15 @@ minikube service -n default metrics-service
 
 
 
-docker build -t sum-service .
+docker build -t iitcloud.azurecr.io/database-app:latest database-service
+docker build -t iitcloud.azurecr.io/gui-app:latest app-service
+docker build -t iitcloud.azurecr.io/metrics-app:latest metrics-service
+az acr login -n iitcloud
+docker push iitcloud.azurecr.io/database-app:latest
+docker push iitcloud.azurecr.io/gui-app:latest
+docker push iitcloud.azurecr.io/metrics-app:latest
+
+
 docker tag sum-service:latest chanakaj/sum-service:latest
 docker push chanakaj/sum-service:latest
  kubectl apply -f C:\MSC\CLOUD\Docker\my-app\k8\sum-deployment.yaml
