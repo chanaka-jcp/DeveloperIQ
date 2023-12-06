@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: gui-app
-        image: chanakaj/gui-app:latest  # Replace with your Docker Hub username
+        image: iitcloud.azurecr.io/gui-app:latest  # Replace with your Docker Hub username
         ports:
         - containerPort: 8002
         resources:

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: database-app
-        image: chanakaj/database-app:latest  # Replace with your Docker Hub username
+        image: iitcloud.azurecr.io/database-app:latest  # Replace with your Docker Hub username
         ports:
         - containerPort: 8001
         resources:
