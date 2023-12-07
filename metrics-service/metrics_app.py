@@ -1,13 +1,16 @@
+from flask import Flask, render_template
 import requests
 from datetime import datetime
 
+
+app = Flask(__name__) 
 database_service_name = "database-service"
 database_service_port = 8001  # Port at which result-service is exposed
 
 # Construct the URL using the service name and port
-database_service_url = f"http://{database_service_name}:{database_service_port}/insert_metrics"
+database_service_url = f"http://{database_service_name}.default.svc.cluster.local:{database_service_port}/insert_metrics"
 #database_service_url = "http://localhost:8001/insert_metrics"
-
+@app.route('/')
 def get_repo_metrics(repo_owner, repo_name,database_service_url):
     commits_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/commits'
     issues_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/issues'
@@ -53,3 +56,6 @@ repo_owner = 'amanchadha'
 repo_name = 'coursera-deep-learning-specialization'
 
 repo_metrics_info = get_repo_metrics(repo_owner, repo_name,database_service_url)
+
+if __name__ == '__main__':
+    app.run(debug=True, port=8000, host='0.0.0.0')
