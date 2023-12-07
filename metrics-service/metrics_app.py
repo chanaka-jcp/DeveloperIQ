@@ -3,7 +3,7 @@ import requests
 from datetime import datetime
 
 
-app = Flask(__name__)
+app = Flask(__name__) 
 database_service_name = "database-service"
 database_service_port = 8001  # Port at which result-service is exposed
 
