@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: gui-service
+  name: gui-service-dev
 spec:
   selector:
-    app: gui-app
+    app: gui-app-dev
   ports:
     - protocol: TCP
       port: 8002

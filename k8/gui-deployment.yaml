@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gui-deployment
+  name: gui-deployment-dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gui-app
+      app: gui-app-dev
   template:
     metadata:
       labels:
-        app: gui-app
+        app: gui-app-dev
     spec:
       containers:
-      - name: gui-app
+      - name: gui-app-dev
         image: iitcloud.azurecr.io/gui-app:latest  # Replace with your Docker Hub username
         ports:
         - containerPort: 8002

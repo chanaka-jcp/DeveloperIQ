@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gui-service-prod
+spec:
+  selector:
+    app: gui-app-dev
+  ports:
+    - protocol: TCP
+      port: 8003
+      targetPort: 8003
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gui-deployment-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gui-app-prod
+  template:
+    metadata:
+      labels:
+        app: gui-app-prod
+    spec:
+      containers:
+      - name: gui-app-prod
+        image: iitcloud.azurecr.io/gui-app:latest  # Replace with your Docker Hub username
+        ports:
+        - containerPort: 8003
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "128Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gui-service-prod
+spec:
+  selector:
+    app: gui-app-prod
+  ports:
+    - protocol: TCP
+      port: 8003
+      targetPort: 8003
+  type: LoadBalancer
