@@ -11,25 +11,39 @@ datainsert_service_url = "http://data-insert-service.default.svc.cluster.local:8
 #datainsert_service_url = "http://localhost:801/data_insert"
 def job():
     print(f"Running job at {datetime.now()}")
+    
+    retries = 3  # Number of retries
+    for attempt in range(retries):
+        try:
+            repo_owner = 'Azure'
+            repo_name = 'FTALive-Sessions'
 
-    repo_owner = 'Azure'
-    repo_name = 'FTALive-Sessions'
+            commits_info = get_commit_data(repo_owner, repo_name)
+            issues_info = get_issue_data(repo_owner, repo_name)
+            pull_requests_info = get_pull_request_data(repo_owner, repo_name)
 
-    commits_info = get_commit_data(repo_owner, repo_name)
-    issues_info = get_issue_data(repo_owner, repo_name)
-    pull_requests_info = get_pull_request_data(repo_owner, repo_name)
+            # Send data to Database Service
+            database_response = requests.post(datainsert_service_url, json={
+                "commits": commits_info,
+                "issues": issues_info,
+                "pull_requests": pull_requests_info
+            })
 
-    # Send data to Database Service
-    database_response = requests.post(datainsert_service_url, json={
-        "commits": commits_info,
-        "issues": issues_info,
-        "pull_requests": pull_requests_info
-    })
-
-    if database_response.text:
-        return database_response.json()
-    else:
-        print("Empty response received.")
+            print(database_response)
+            
+            if database_response.text:
+                return database_response.json()
+            else:
+                print("Empty response received.")
+                
+        except ConnectionError as e:
+            print(f"ConnectionError: {e}")
+            if attempt < retries - 1:
+                print(f"Retrying in 5 seconds (attempt {attempt + 1}/{retries})")
+                time.sleep(5)
+            else:
+                print("Max retries reached. Exiting.")
+                break
 def get_commit_data(repo_owner, repo_name):
     commits_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/commits'
     commits_response = requests.get(commits_url)
@@ -80,13 +94,12 @@ def get_pull_request_data(repo_owner, repo_name):
     return pull_requests_info
 
 # Schedule the job to run every hour
-#schedule.every().hour.do(job)
-schedule.every(5).minutes.do(job)
+schedule.every().hour.do(job)
 # Run the scheduler in a separate thread
 def scheduler_thread():
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(60)
 
 if __name__ == '__main__':
     import threading
