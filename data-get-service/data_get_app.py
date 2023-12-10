@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # Construct the URL using the service name and port
 datainsert_service_url = "http://data-insert-service.default.svc.cluster.local:801/data_insert"
-datainsert_service_url = "http://localhost:801/data_insert"
+#datainsert_service_url = "http://localhost:801/data_insert"
 def job():
     print(f"Running job at {datetime.now()}")
 
