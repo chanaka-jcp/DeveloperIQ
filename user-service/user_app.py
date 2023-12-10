@@ -20,23 +20,23 @@ def execute_query(query):
 @app.route('/')
 def index():
     # Query to get user commits count
-    commits_query = "SELECT User_name, COUNT(*) AS n_commits FROM Commits WHERE User_name IS NOT NULL GROUP BY User_name"
+    commits_query = "SELECT User_name, COUNT(*) AS n_commits FROM User_Commits WHERE User_name IS NOT NULL GROUP BY User_name"
     commits_result = execute_query(commits_query)
 
     # Query to get user issues count
-    issues_query = "SELECT User_name, COUNT(*) AS n_issues FROM Issues WHERE User_name IS NOT NULL GROUP BY User_name"
-    issues_result = execute_query(issues_query)
+    pulls_query = "SELECT User_name, COUNT(*) AS n_pulls FROM User_Pulls WHERE User_name IS NOT NULL GROUP BY User_name"
+    pulls_result = execute_query(pulls_query)
 
     # Query to get average time to complete issues in hours
     avg_time_query = """
     SELECT user_name, SUM(DATEDIFF(MINUTE, IssueTime, UpdateTime))/COUNT(*) AS avgTimeToCompleteInHours
-    FROM Issues
+    FROM User_Issues
     WHERE User_name IS NOT NULL
     GROUP BY user_name
     """
     avg_time_result = execute_query(avg_time_query)
 
-    return render_template('result.html', commits_result=commits_result, issues_result=issues_result, avg_time_result=avg_time_result)
+    return render_template('result.html', commits_result=commits_result, pulls_result=pulls_result, avg_time_result=avg_time_result)
 
 if __name__ == '__main__':
     app.run(debug=True, port=802, host='0.0.0.0')
