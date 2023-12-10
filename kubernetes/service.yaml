@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-get-service
+spec:
+  selector:
+    app: data-get-app
+  ports:
+    - protocol: TCP
+      port: 800
+      targetPort: 800
+  type: ClusterIP 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-insert-service
+spec:
+  selector:
+    app: data-insert-app
+  ports:
+    - protocol: TCP
+      port: 801
+      targetPort: 801
+  type: ClusterIP  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service-dev
+spec:
+  selector:
+    app: user-app-dev
+  ports:
+    - protocol: TCP
+      port: 802
+      targetPort: 802
+  type: LoadBalancer
+

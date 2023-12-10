@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["python", "gui_app.py"]
+CMD ["python", "data_insert_app.py"]

@@ -39,4 +39,4 @@ def index():
     return render_template('result.html', commits_result=commits_result, issues_result=issues_result, avg_time_result=avg_time_result)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8002, host='0.0.0.0')
+    app.run(debug=True, port=802, host='0.0.0.0')

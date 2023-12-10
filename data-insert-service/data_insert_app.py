@@ -4,7 +4,7 @@ import pymssql
 
 app = Flask(__name__)
 
-@app.route('/insert_metrics', methods=['POST'])
+@app.route('/data_insert', methods=['POST'])
 def insert_metrics():
     data = request.get_json()
     commits = data.get('commits', [])
@@ -17,14 +17,12 @@ def insert_metrics():
     password = 'DWH@123CW'
 
     # Insert commits data into Azure SQL Server
-    insert_commit_data_to_sql_server(commits, server, database, username, password)
+    insert_commit_data(commits, server, database, username, password)
 
     # Insert issues data into Azure SQL Server
-    insert_issues_data_to_sql_server(issues, server, database, username, password)
+    insert_issues_data(issues, server, database, username, password)
 
-    return jsonify({'message': 'Metrics data received and processed successfully'})
-
-def insert_commit_data_to_sql_server(commits_info, server, database, username, password):
+def insert_commit_data(commits_info, server, database, username, password):
     connection = pymssql.connect(server=server, user=username, password=password, database=database)
     cursor = connection.cursor()
 
@@ -48,7 +46,7 @@ def insert_commit_data_to_sql_server(commits_info, server, database, username, p
     # Close the connection
     connection.close()
 
-def insert_issues_data_to_sql_server(issues_info, server, database, username, password):
+def insert_issues_data(issues_info, server, database, username, password):
     connection = pymssql.connect(server=server, user=username, password=password, database=database)
     cursor = connection.cursor()
 
@@ -73,4 +71,4 @@ def insert_issues_data_to_sql_server(issues_info, server, database, username, pa
     connection.close()
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8001, host='0.0.0.0')
+    app.run(debug=True, port=801, host='0.0.0.0')

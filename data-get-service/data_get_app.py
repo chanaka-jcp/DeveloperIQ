@@ -5,40 +5,33 @@ import schedule
 import time
 
 app = Flask(__name__)
-database_service_name = "database-service"
-database_service_port = 8001  # Port at which result-service is exposed
 
 # Construct the URL using the service name and port
-database_service_url = f"http://{database_service_name}.default.svc.cluster.local:{database_service_port}/insert_metrics"
-#database_service_url = "http://localhost:8001/insert_metrics"
-
+datainsert_service_url = f"http://data-insert-service.default.svc.cluster.local:801/data_insert"
 def job():
     print(f"Running job at {datetime.now()}")
 
     # Your existing code to get repo metrics
     repo_owner = 'amanchadha'
     repo_name = 'coursera-deep-learning-specialization'
-    repo_metrics_info = get_repo_metrics(repo_owner, repo_name, database_service_url)
+    repo_metrics_info = post_data(repo_owner, repo_name, datainsert_service_url)
 
 
-def get_repo_metrics(repo_owner, repo_name, database_service_url):
-    commits_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/commits'
-    issues_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/issues'
-
-    commits_response = requests.get(commits_url)
-    issues_response = requests.get(issues_url)
-
-    commits_info = parse_commit_data(commits_response.json(), repo_owner, repo_name)
-    issues_info = parse_issue_data(issues_response.json(), repo_owner, repo_name)
+def post_data(repo_owner, repo_name, datainsert_service_url):
+    commits_info = get_commit_data(repo_owner, repo_name)
+    issues_info = get_issue_data( repo_owner, repo_name)
 
     # Send data to Database Service
-    database_response = requests.post(database_service_url, json={"commits": commits_info, "issues": issues_info})
+    database_response = requests.post(datainsert_service_url, json={"commits": commits_info, "issues": issues_info})
 
     # Return the metrics
     return database_response.json()
 
 
-def parse_commit_data(commits_data, repo_owner, repo_name):
+def get_commit_data(repo_owner, repo_name):
+    commits_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/commits'
+    commits_response = requests.get(commits_url)
+    commits_data=commits_response.json()
     commits_info = []
     for commit in commits_data:
         user_login = commit['author']['login'] if commit['author'] is not None and 'login' in commit['author'] else None
@@ -52,7 +45,10 @@ def parse_commit_data(commits_data, repo_owner, repo_name):
     return commits_info
 
 
-def parse_issue_data(issues_data, repo_owner, repo_name):
+def get_issue_data(repo_owner, repo_name):
+    issues_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/issues'
+    issues_response = requests.get(issues_url)
+    issues_data=issues_response.json()
     issues_info = []
     for issue in issues_data:
         issue_data = {
@@ -68,7 +64,6 @@ def parse_issue_data(issues_data, repo_owner, repo_name):
 
 # Schedule the job to run every hour
 schedule.every().hour.do(job)
-#schedule.every().minute.do(job)
 # Run the scheduler in a separate thread
 def scheduler_thread():
     while True:
@@ -77,9 +72,8 @@ def scheduler_thread():
 
 
 if __name__ == '__main__':
-    # Start the scheduler thread
     import threading
-    threading.Thread(target=scheduler_thread, daemon=True).start()
+    threading.Thread(target=scheduler_thread, daemon=True).start()# Start the scheduler thread
 
     # Start the Flask app
-    app.run(debug=True, port=8000, host='0.0.0.0')
+    app.run(debug=True, port=800, host='0.0.0.0')

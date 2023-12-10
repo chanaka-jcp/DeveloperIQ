@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-get-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-get-app
+  template:
+    metadata:
+      labels:
+        app: data-get-app
+    spec:
+      containers:
+      - name: data-get-app
+        image: iitcloud.azurecr.io/data-get-app:latest  # Replace with your Docker Hub username
+        ports:
+        - containerPort: 800
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "128Mi"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-insert-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-insert-app
+  template:
+    metadata:
+      labels:
+        app: data-insert-app
+    spec:
+      containers:
+      - name: data-insert-app
+        image: iitcloud.azurecr.io/data-insert-app:latest
+        ports:
+        - containerPort: 801
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "128Mi"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deployment-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-app-dev
+  template:
+    metadata:
+      labels:
+        app: user-app-dev
+    spec:
+      containers:
+      - name: user-app-dev
+        image: iitcloud.azurecr.io/user-app:latest  # Replace with your Docker Hub username
+        ports:
+        - containerPort: 802
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "128Mi"
