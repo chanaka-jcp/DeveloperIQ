@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["python", "metrics_app.py"]
+CMD ["python", "data_get_app.py"]

@@ -14,17 +14,20 @@
         <h1 class="mb-4">Developer Metrics</h1>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <h2>Commits Count</h2>
-                <canvas id="commitsChart"></canvas>
+                <canvas id="commitsChart" width="400" height="300"></canvas>
             </div>
-            <div class="col-md-4">
-                <h2>Issues Count</h2>
-                <canvas id="issuesChart"></canvas>
+            <div class="col-md-6">
+                <h2>Pull Requests Count</h2>
+                <canvas id="pullsChart" width="400" height="300"></canvas>
             </div>
-            <div class="col-md-4">
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
                 <h2>Average Time to Complete Issues</h2>
-                <canvas id="avgTimeChart"></canvas>
+                <canvas id="avgTimeChart" width="800" height="300"></canvas>
             </div>
         </div>
     </div>
@@ -32,7 +35,7 @@
     <script>
         // Parse data from Flask variables
         var commitsData = {{ commits_result | tojson }};
-        var issuesData = {{ issues_result | tojson }};
+        var pullsData = {{ pulls_result | tojson }};
         var avgTimeData = {{ avg_time_result | tojson }};
 
         // Function to get user names from data
@@ -71,13 +74,13 @@
             }
         };
 
-        var issuesChartConfig = {
+        var pullsChartConfig = {
             type: 'bar',
             data: {
-                labels: getUserNames(issuesData),
+                labels: getUserNames(pullsData),
                 datasets: [{
-                    label: 'Issues Count',
-                    data: getCounts(issuesData),
+                    label: 'Pull Requests Count',
+                    data: getCounts(pullsData),
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1
@@ -115,7 +118,7 @@
 
         // Create charts
         var commitsChart = new Chart(document.getElementById('commitsChart').getContext('2d'), commitsChartConfig);
-        var issuesChart = new Chart(document.getElementById('issuesChart').getContext('2d'), issuesChartConfig);
+        var pullsChart = new Chart(document.getElementById('pullsChart').getContext('2d'), pullsChartConfig);
         var avgTimeChart = new Chart(document.getElementById('avgTimeChart').getContext('2d'), avgTimeChartConfig);
     </script>
 </body>
