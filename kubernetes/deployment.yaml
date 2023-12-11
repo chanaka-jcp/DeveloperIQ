@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: data-get-app
-        image: iitcloud.azurecr.io/data-get-app:latest  # Replace with your Docker Hub username
+        image: iitcloud.azurecr.io/data-get-app:latest  
         ports:
         - containerPort: 800
         resources:
@@ -62,7 +62,7 @@ spec:
     spec:
       containers:
       - name: user-app-dev
-        image: iitcloud.azurecr.io/user-app:latest  # Replace with your Docker Hub username
+        image: iitcloud.azurecr.io/user-app:latest  
         ports:
         - containerPort: 802
         resources:
